@@ -227,23 +227,23 @@ h1 {
     color: white;
 }
 
-/* Modal as Bottom Banner */
+/* Modal as Top Banner */
+/* Modal as Top Banner */
 .modal-overlay {
-    position: absolute;
-    /* Relative to root, or fixed if needed */
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto;
-    inset: auto;
-    /* Reset inset */
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: 100vw;
+    height: auto;
     background-color: transparent;
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     justify-content: center;
-    z-index: 100;
+    z-index: 9999;
     pointer-events: none;
-    /* Let clicks pass through to board if needed, but buttons need events */
+    padding-top: 20px;
 }
 
 .modal-content {
@@ -253,16 +253,16 @@ h1 {
     box-shadow: var(--shadow-lg);
     text-align: center;
     color: var(--color-text);
-    animation: slideUp 0.3s ease-out;
+    animation: slideDown 0.3s ease-out;
     pointer-events: auto;
     /* Re-enable pointer events */
     border: 2px solid var(--color-primary);
     min-width: 300px;
 }
 
-@keyframes slideUp {
+@keyframes slideDown {
     from {
-        transform: translateY(100%);
+        transform: translateY(-100%);
         opacity: 0;
     }
 

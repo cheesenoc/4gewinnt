@@ -3,13 +3,21 @@ import GameBoard from './components/GameBoard';
 import GameMenu from './components/GameMenu';
 import WinnerModal from './components/WinnerModal';
 import { useGameState } from './hooks/useGameState';
+import { playDropSound, playWinSound } from './utils/audio';
 import { getBestMove } from './utils/ai';
 import { PLAYER_1, PLAYER_2 } from './utils/gameLogic';
 
 function App() {
     const { board, currentPlayer, winner, winningCells, isDraw, dropChip, resetGame } = useGameState();
-    const [gameMode, setGameMode] = useState('pve'); // 'pve' or 'pvp'
+    const [gameMode, setGameMode] = useState('pve');
     const [isAiThinking, setIsAiThinking] = useState(false);
+
+    // Sound effects for win
+    useEffect(() => {
+        if (winner) {
+            playWinSound();
+        }
+    }, [winner]);
 
     // Handle AI turn
     useEffect(() => {
@@ -17,16 +25,16 @@ function App() {
             setIsAiThinking(true);
             const timer = setTimeout(() => {
                 const col = getBestMove(board);
-                dropChip(col);
+                if (dropChip(col)) playDropSound(); // AI plays sound
                 setIsAiThinking(false);
-            }, 500); // Simulate thinking delay
+            }, 500);
             return () => clearTimeout(timer);
         }
     }, [currentPlayer, winner, isDraw, gameMode, board, dropChip]);
 
     const handleColumnClick = (col) => {
-        if (gameMode === 'pve' && currentPlayer === PLAYER_2) return; // Ignore clicks during AI turn
-        dropChip(col);
+        if (gameMode === 'pve' && currentPlayer === PLAYER_2) return;
+        if (dropChip(col)) playDropSound(); // Human plays sound
     };
 
     const handleRestart = (mode) => {
