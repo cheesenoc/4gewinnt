@@ -18,7 +18,7 @@ export const checkWin = (board, player) => {
                 board[r][c + 2] === player &&
                 board[r][c + 3] === player
             ) {
-                return true;
+                return [{ r, c }, { r, c: c + 1 }, { r, c: c + 2 }, { r, c: c + 3 }];
             }
         }
     }
@@ -32,7 +32,7 @@ export const checkWin = (board, player) => {
                 board[r + 2][c] === player &&
                 board[r + 3][c] === player
             ) {
-                return true;
+                return [{ r, c }, { r: r + 1, c }, { r: r + 2, c }, { r: r + 3, c }];
             }
         }
     }
@@ -46,7 +46,7 @@ export const checkWin = (board, player) => {
                 board[r + 2][c + 2] === player &&
                 board[r + 3][c + 3] === player
             ) {
-                return true;
+                return [{ r, c }, { r: r + 1, c: c + 1 }, { r: r + 2, c: c + 2 }, { r: r + 3, c: c + 3 }];
             }
         }
     }
@@ -60,12 +60,12 @@ export const checkWin = (board, player) => {
                 board[r - 2][c + 2] === player &&
                 board[r - 3][c + 3] === player
             ) {
-                return true;
+                return [{ r, c }, { r: r - 1, c: c + 1 }, { r: r - 2, c: c + 2 }, { r: r - 3, c: c + 3 }];
             }
         }
     }
 
-    return false;
+    return null;
 };
 
 export const checkDraw = (board) => {

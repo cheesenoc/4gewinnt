@@ -39,55 +39,29 @@ body {
     color: var(--color-text);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+    /* Prevent pull-to-refresh */
 }
 
 #root {
     width: 100%;
-    min-height: 100vh;
+    height: 100dvh;
+    /* Use dynamic viewport height */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding: var(--spacing-md);
+    justify-content: center;
+    /* Center content vertically */
+    padding: var(--spacing-sm);
     box-sizing: border-box;
+    overflow: hidden;
+    /* Prevent scrolling */
 }
 
-h1,
-h2,
-h3 {
-    margin: 0 0 var(--spacing-sm);
-    font-weight: 700;
-    color: var(--color-primary);
-}
-
-button {
-    cursor: pointer;
-    border: none;
-    font-family: inherit;
-    font-weight: 600;
-    transition: all var(--anim-duration);
-}
-
-.btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--radius-md);
-    background-color: white;
-    color: var(--color-text);
-    box-shadow: var(--shadow-sm);
-}
-
-.btn-primary {
-    background-color: var(--color-primary);
-    color: white;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.btn:active {
-    transform: translateY(0);
+h1 {
+    margin: 0 0 var(--spacing-xs);
+    font-size: 1.5rem;
+    flex-shrink: 0;
 }
 
 /* Board */
@@ -98,19 +72,29 @@ button {
     box-shadow: var(--shadow-lg);
     display: inline-block;
     position: relative;
-    /* Glass effect for depth */
     background: linear-gradient(135deg, var(--color-board) 0%, var(--color-board-dark) 100%);
     border: 4px solid #1a365d;
+    /* Make board responsive but keep aspect ratio roughly */
+    max-width: 100%;
+    max-height: 70dvh;
+    /* Leave space for menu/header */
+    aspect-ratio: 7/6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .board-row {
     display: flex;
+    justify-content: center;
+    flex: 1;
 }
 
 /* Cell & Chips */
 .cell {
-    width: 60px;
-    height: 60px;
+    /* Relative sizing using vmin/vmax to fit screen */
+    width: clamp(30px, 12vmin, 60px);
+    height: clamp(30px, 12vmin, 60px);
     position: relative;
     cursor: pointer;
     margin: 2px;
@@ -121,22 +105,21 @@ button {
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, transparent 24px, var(--color-board) 25px);
+    background: radial-gradient(circle at center, transparent 65%, var(--color-board) 66%);
     z-index: 10;
     pointer-events: none;
 }
 
 .chip {
-    width: 50px;
-    height: 50px;
+    width: 80%;
+    /* Relative to cell */
+    height: 80%;
     border-radius: 50%;
     background-color: #e2e8f0;
-    /* Empty slot color */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: top 0.5s ease-in;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -150,67 +133,136 @@ button {
     background: radial-gradient(circle at 30% 30%, #ffe66d, var(--color-player-2));
 }
 
+.chip.dropped {
+    animation: dropBounce 0.6s forwards;
+}
+
+@keyframes dropBounce {
+    0% {
+        transform: translate(-50%, -500%);
+        animation-timing-function: ease-in;
+    }
+
+    60% {
+        transform: translate(-50%, -50%);
+        animation-timing-function: ease-out;
+    }
+
+    80% {
+        transform: translate(-50%, -70%);
+        animation-timing-function: ease-in;
+    }
+
+    100% {
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+        filter: brightness(1.2);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+        filter: brightness(1.5);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+        filter: brightness(1.2);
+    }
+}
+
+.chip.highlight {
+    animation: pulse 1.5s infinite;
+    z-index: 20;
+}
+
+
 /* Menu */
 .game-menu {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
     display: flex;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
     align-items: center;
     flex-wrap: wrap;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .menu-group {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-xs);
 }
 
 .mode-selector {
     display: flex;
-    gap: var(--spacing-xs);
+    gap: 2px;
     background: white;
-    padding: 4px;
+    padding: 2px;
     border-radius: var(--radius-md);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Modal */
+.turn-indicator {
+    flex-shrink: 0;
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Button styles */
+.btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    /* Smaller padding */
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+    background-color: white;
+    color: var(--color-text);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+/* Modal as Bottom Banner */
 .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    /* Relative to root, or fixed if needed */
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    inset: auto;
+    /* Reset inset */
+    background-color: transparent;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     z-index: 100;
-    backdrop-filter: blur(4px);
-    animation: fadeIn 0.3s ease-out;
+    pointer-events: none;
+    /* Let clicks pass through to board if needed, but buttons need events */
 }
 
 .modal-content {
-    background: white;
-    padding: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.95);
+    padding: var(--spacing-md);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     text-align: center;
     color: var(--color-text);
     animation: slideUp 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    pointer-events: auto;
+    /* Re-enable pointer events */
+    border: 2px solid var(--color-primary);
+    min-width: 300px;
 }
 
 @keyframes slideUp {
     from {
-        transform: translateY(20px);
+        transform: translateY(100%);
         opacity: 0;
     }
 
@@ -220,23 +272,30 @@ button {
     }
 }
 
-/* Mobile Responsive */
-@media (max-width: 600px) {
-    .cell {
-        width: 40px;
-        height: 40px;
+/* Landscape Mode Tweak */
+@media (max-height: 500px) and (orientation: landscape) {
+    #root {
+        flex-direction: row;
+        gap: var(--spacing-md);
+        align-items: center;
     }
 
-    .chip {
-        width: 32px;
-        height: 32px;
+    h1 {
+        display: none;
     }
 
-    .cell::after {
-        background: radial-gradient(circle at center, transparent 16px, var(--color-board) 17px);
-    }
+    /* Hide title in landscape if tight */
 
     .game-menu {
         flex-direction: column;
+        margin-bottom: 0;
+    }
+
+    .game-board {
+        height: 90vh;
+        /* Max height in landscape */
+        width: auto;
+        /* Auto width based on aspect ratio */
+        max-height: none;
     }
 }

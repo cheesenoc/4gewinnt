@@ -1,8 +1,12 @@
 import React from 'react';
 import GameCell from './GameCell';
-import { ROWS, COLS } from '../utils/gameLogic';
 
-const GameBoard = ({ board, onColumnClick, disabled }) => {
+const GameBoard = ({ board, winningCells, onColumnClick, disabled }) => {
+    const isWinningCell = (r, c) => {
+        if (!winningCells) return false;
+        return winningCells.some(cell => cell.r === r && cell.c === c);
+    };
+
     return (
         <div className="game-board">
             {board.map((row, r) => (
@@ -11,6 +15,7 @@ const GameBoard = ({ board, onColumnClick, disabled }) => {
                         <GameCell
                             key={`${r}-${c}`}
                             value={cell}
+                            isHighlight={isWinningCell(r, c)}
                             onClick={() => onColumnClick(c)}
                             disabled={disabled}
                         />

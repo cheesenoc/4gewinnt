@@ -6,11 +6,13 @@ export const useGameState = () => {
     const [currentPlayer, setCurrentPlayer] = useState(PLAYER_1);
     const [winner, setWinner] = useState(null);
     const [isDraw, setIsDraw] = useState(false);
+    const [winningCells, setWinningCells] = useState([]);
 
     const resetGame = useCallback(() => {
         setBoard(createBoard());
         setCurrentPlayer(PLAYER_1);
         setWinner(null);
+        setWinningCells([]);
         setIsDraw(false);
     }, []);
 
@@ -24,8 +26,10 @@ export const useGameState = () => {
         newBoard[row][col] = currentPlayer;
         setBoard(newBoard);
 
-        if (checkWin(newBoard, currentPlayer)) {
+        const winResult = checkWin(newBoard, currentPlayer);
+        if (winResult) {
             setWinner(currentPlayer);
+            setWinningCells(winResult);
         } else if (checkDraw(newBoard)) {
             setIsDraw(true);
         } else {
@@ -38,6 +42,7 @@ export const useGameState = () => {
         board,
         currentPlayer,
         winner,
+        winningCells,
         isDraw,
         dropChip,
         resetGame,

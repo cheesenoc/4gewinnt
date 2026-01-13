@@ -7,7 +7,7 @@ import { getBestMove } from './utils/ai';
 import { PLAYER_1, PLAYER_2 } from './utils/gameLogic';
 
 function App() {
-    const { board, currentPlayer, winner, isDraw, dropChip, resetGame } = useGameState();
+    const { board, currentPlayer, winner, winningCells, isDraw, dropChip, resetGame } = useGameState();
     const [gameMode, setGameMode] = useState('pve'); // 'pve' or 'pvp'
     const [isAiThinking, setIsAiThinking] = useState(false);
 
@@ -56,6 +56,7 @@ function App() {
 
             <GameBoard
                 board={board}
+                winningCells={winningCells}
                 onColumnClick={handleColumnClick}
                 disabled={winner || isDraw || (gameMode === 'pve' && currentPlayer === PLAYER_2)}
             />
