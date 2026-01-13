@@ -15,8 +15,9 @@ async function deploy() {
         host: process.env.FTP_HOST,
         user: process.env.FTP_USER,
         password: process.env.FTP_PASSWORD,
-        secure: process.env.FTP_SECURE === 'true',
+        secure: process.env.FTP_SECURE === 'true' || !!process.env.FTP_TLS_MIN_VERSION, // Enable secure if TLS version is specified
         port: process.env.FTP_PORT ? parseInt(process.env.FTP_PORT) : 21,
+        secureOptions: process.env.FTP_TLS_MIN_VERSION ? { minVersion: process.env.FTP_TLS_MIN_VERSION } : undefined,
     };
 
     const localDir = path.join(__dirname, '../dist');
