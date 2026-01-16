@@ -299,3 +299,63 @@ h1 {
         max-height: none;
     }
 }
+
+/* Icon Buttons */
+.icon-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    /* Space between icon and text */
+    min-width: 60px;
+    /* Ensure touch target size */
+    padding: 0.5rem;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    /* Reserve space for border */
+}
+
+.icon-btn svg {
+    width: 28px;
+    height: 28px;
+}
+
+.icon-btn .btn-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.icon-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background-color: #f7fafc;
+}
+
+.icon-btn.active {
+    background-color: #e2e8f0;
+    border-color: var(--color-primary);
+    color: var(--color-primary) !important;
+    /* Override inline color if needed, but we used inline for difficulty colors */
+}
+
+/* Specific active overrides for difficulty buttons to keep their colors */
+.icon-btn.active[title*="Leicht"] {
+    border-color: #4ade80;
+    background-color: #ecfdf5;
+}
+
+.icon-btn.active[title*="Mittel"] {
+    border-color: #facc15;
+    background-color: #fefce8;
+}
+
+.icon-btn.active[title*="Schwer"] {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.game-menu {
+    gap: 0.75rem;
+    /* Increase gap slightly */
+}

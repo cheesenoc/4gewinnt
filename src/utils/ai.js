@@ -127,8 +127,23 @@ const minmax = (board, depth, alpha, beta, maximizingPlayer) => {
     }
 };
 
-export const getBestMove = (board) => {
-    // Use depth 4 or 5 for decent performance/difficulty
-    const result = minmax(board, 4, -Infinity, Infinity, true);
+export const getBestMove = (board, difficulty = 'medium') => {
+    let depth;
+    switch (difficulty) {
+        case 'easy':
+            depth = 2; // Very shallow lookahead
+            break;
+        case 'hard':
+            depth = 6; // Deep lookahead (might be slower)
+            break;
+        case 'medium':
+        default:
+            depth = 4; // Standard balanced depth
+            break;
+    }
+
+    // For 'easy', add a bit of randomness to make it less perfect even at shallow depth if needed
+    // But for now, depth 2 is significantly weaker than 4.
+    const result = minmax(board, depth, -Infinity, Infinity, true);
     return result.column;
 };
