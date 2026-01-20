@@ -1,0 +1,20 @@
+# Node and tooling
+node_modules/
+.npm/
+package-lock.json
+yarn.lock
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# Misc
+.env
